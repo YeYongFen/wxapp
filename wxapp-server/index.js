@@ -14,7 +14,12 @@ const userTable = {} //记录用户信息表
 
 app.get('/oauth/login', (req, resp) => {
   const { code } = req.query;
-  console.log(code)
+  
+  if(!code){
+    return resp.json({
+      status:"error"
+    })
+  }
 
 
   axios.get('https://api.weixin.qq.com/sns/jscode2session', {
@@ -25,20 +30,26 @@ app.get('/oauth/login', (req, resp) => {
       grant_type: 'authorization_code'
     }
   }).then(({data}) => {
-    let {openId , session_key} = data.openid
-    let user = userTable[openId]
+    let {openid , session_key} = data
+    let user = userTable[openid]
     if (!user) {       //'新用户'
-      userTable[openId] = {
-        openId,
+      userTable[openid] = {
+        openid,
       }
-      //console.log('新用户', user)
+      console.log('新用户', user)
     } else {  //老用户'
-      //console.log('老用户', user)
+      console.log('老用户', user)
     }
     resp.json({
-      openId
+      status:"success",
+      openid
     })
 
+  }).catch((e)=>{
+    resp.json({
+      status:"error",
+      message:e.message
+    })
   })
 
 

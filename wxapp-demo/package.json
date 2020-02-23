@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@chunpu/http": "github:chunpu/http",
+    "events": "^3.1.0",
     "flyio": "^0.6.14"
   }
 }
